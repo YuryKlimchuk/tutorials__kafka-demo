@@ -45,7 +45,18 @@ public class UserRepoImpl implements UserRepo {
 
     @Override
     public Boolean create(User user) {
-        return null;
+        String id = user.getId();
+        String email = user.getEmail();
+
+        Boolean isIdExist = storage.keySet().contains(id);
+        Boolean isEmailExist = storage.values().stream().map(User::getEmail).anyMatch(e -> email.equals(e));
+
+        if (isIdExist || isEmailExist) {
+            return Boolean.FALSE;
+        }
+
+        storage.put(id, user);
+        return Boolean.TRUE;
     }
 
     @Override
