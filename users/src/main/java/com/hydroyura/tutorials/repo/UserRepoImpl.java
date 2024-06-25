@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 @Service
 public class UserRepoImpl implements UserRepo {
@@ -15,23 +16,22 @@ public class UserRepoImpl implements UserRepo {
 
 
     public UserRepoImpl() {
-        String UUID1 = java.util.UUID.randomUUID().toString();
-        storage.put(UUID1, new User()
+        storage.put("UUID1", new User()
                 .setEmail("user1@gmail.com")
                 .setName("Name1")
                 .setSurname("Surname1")
-                .setId(UUID1)
+                .setPassword("pwd")
+                .setId("UUID1")
         );
 
-        String UUID2 = java.util.UUID.randomUUID().toString();
-        storage.put(UUID2, new User()
+        storage.put("UUID2", new User()
                 .setEmail("user2@gmail.com")
                 .setName("Name2")
                 .setSurname("Surname2")
-                .setId(UUID1)
+                .setPassword("pwd")
+                .setId("UUID2")
         );
     }
-
 
     @Override
     public Optional<User> getUserById(String id) {
@@ -39,11 +39,14 @@ public class UserRepoImpl implements UserRepo {
     }
 
     @Override
-    public Optional<User> getUserByEmail(String email) {
-        return Optional.empty();
+    public Optional<User> getUserByName(String name) {
+        return storage.values()
+                .stream()
+                .filter(user -> user.getName().equals(name))
+                .findFirst();
     }
 
-    @Override
+    /*
     public Boolean create(User user) {
         String id = user.getId();
         String email = user.getEmail();
@@ -58,20 +61,29 @@ public class UserRepoImpl implements UserRepo {
         storage.put(id, user);
         return Boolean.TRUE;
     }
-
-    @Override
-    public Boolean update(User user) {
-        return null;
-    }
+    */
 
     @Override
     public Boolean updateEmail(String id, String newEmail) {
-        return null;
+        return getUserById(id)
+                .map(user -> {
+                    user.setEmail(newEmail);
+                    storage.put(user.getId(), user);
+                    return Boolean.TRUE;
+                })
+                .isPresent();
     }
 
+    /*
     @Override
     public Boolean updateName(String id, String newName) {
-        return null;
+        return getUserById(id)
+                .map(user -> {
+                    user.setName(newName);
+                    storage.put(user.getId(), user);
+                    return Boolean.TRUE;
+                })
+                .isPresent();
     }
-
+    */
 }

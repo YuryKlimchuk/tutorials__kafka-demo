@@ -2,7 +2,7 @@ package com.hydroyura.tutorials.models;
 
 public class User {
 
-    private String name, surname, email, id;
+    private String name, surname, password, email, id;
 
     public User() {}
 
@@ -39,6 +39,15 @@ public class User {
 
     public User setId(String id) {
         this.id = id;
+        return this;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public User setPassword(String password) {
+        this.password = password;
         return this;
     }
 }

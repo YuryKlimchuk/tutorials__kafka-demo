@@ -7,10 +7,7 @@ import java.util.Optional;
 public interface UserRepo {
 
     Optional<User> getUserById(String id);
-    Optional<User> getUserByEmail(String email);
-    Boolean create(User user);
-    Boolean update(User user);
+    Optional<User> getUserByName(String name);
     Boolean updateEmail(String id, String newEmail);
-    Boolean updateName(String id, String newName);
 
 }
